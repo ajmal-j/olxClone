@@ -13,7 +13,14 @@ import {
   useState,
 } from "react";
 import { auth, db, storage } from "../store/firebase";
-import { setDoc, doc, getDoc, getDocs, collection } from "firebase/firestore";
+import {
+  setDoc,
+  doc,
+  getDoc,
+  getDocs,
+  collection,
+  deleteDoc,
+} from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import toast from "react-hot-toast";
@@ -41,6 +48,7 @@ type AuthContextValue = {
   uploadImage(image: Blob): Promise<string>;
   getAllData(): Promise<[]>;
   getProduct(id: string): Promise<any>;
+  deleteProduct(id: string): void;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -140,6 +148,15 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     });
     return dataArray;
   }
+  async function deleteProduct(id: string) {
+    try {
+      if (!id) throw new Error("Invalid Id.");
+      await deleteDoc(doc(db, "products", id));
+      console.log("deleted");
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
       setUser(currentUser);
@@ -162,6 +179,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         setProduct,
         getAllData,
         getProduct,
+        deleteProduct,
       }}
     >
       {children}

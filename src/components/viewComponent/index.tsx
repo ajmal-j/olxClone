@@ -3,15 +3,14 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { ProductContext } from "../../context/productContext";
 import { UserAuth } from "../../context/authProvider";
 import "./index.css";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaTrashAlt } from "react-icons/fa";
 
 const View = () => {
   const { id } = useParams();
   const [seller, setSeller] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const { view, setView } = useContext(ProductContext);
-  const { getDetails, getProduct } = UserAuth();
-
+  const { getDetails, getProduct, deleteProduct, user } = UserAuth();
   const getProductMemoized = useMemo(() => getProduct, []);
   const getDetailsMemoized = useMemo(() => getDetails, []);
   const fetchData = useCallback(async () => {
@@ -55,9 +54,17 @@ const View = () => {
                 <span>{view.createAt}</span>
               </div>
               <div className='contactDetails'>
-                <p>Seller details</p>
+                <p className='sellerDetails'>Seller details</p>
                 <p>{seller?.name}</p>
                 <p>{seller?.contact}</p>
+                {user && id && view.userId === user?.uid && (
+                  <button
+                    onClick={() => deleteProduct(id)}
+                    className='flex w-full items-end justify-end text-red-600 pt-3'
+                  >
+                    <FaTrashAlt />
+                  </button>
+                )}
               </div>
             </div>
           </div>

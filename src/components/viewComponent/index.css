@@ -56,11 +56,11 @@
   border-radius: 10px;
 }
 
-.viewParentDiv .rightSection .contactDetails :first-child {
-  font-size: 20px;
+.viewParentDiv .rightSection .contactDetails .sellerDetails{
+  font-size: large;
   line-height: 24px;
-  font-weight: 700;
-  color: #002f34;
+  font-weight: bold !important;
+  color: #000000;
   font-weight: 400;
-  padding: 0;
+  padding-bottom: 8px;
 }

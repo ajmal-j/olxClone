@@ -49,7 +49,7 @@ export default function Card() {
             onClick={navigateFunction}
             key={id}
             data-id={id}
-            className='card border border-black/20 rounded'
+            className='card border border-black/20 bg-gray-50 rounded-xl'
           >
             <div className='favorite'>
               <FaHeart></FaHeart>
