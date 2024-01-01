@@ -1,5 +1,10 @@
 import Create from "../../components/create";
+import ProtectedRoute from "../../components/protectedRoute";
 
 export default function CreateProduct() {
-  return <Create />;
+  return (
+    <ProtectedRoute>
+      <Create />
+    </ProtectedRoute>
+  );
 }

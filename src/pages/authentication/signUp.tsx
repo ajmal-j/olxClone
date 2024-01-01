@@ -47,7 +47,7 @@ export default function SignUp() {
       });
   };
   return (
-    <div className='w-[500px] mx-auto mt-20 pt-5 pb-5` bg-gray-300 rounded-lg border-gray-400 border-4 mb-5'>
+    <div className='w-[500px] mx-auto mt-20 pt-5 pb-5` bg-gray-300 rounded-3xl border-gray-400 border-4 mb-5'>
       <div>
         <img src='/logo.png' className='h-[100px] mx-auto' alt='' />
       </div>
@@ -65,7 +65,7 @@ export default function SignUp() {
           id='name'
           type='text'
           placeholder='Enter your full name.'
-          className='border rounded h-[40px] px-4 appearance-none'
+          className='h-[40px] px-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
         />
         <label htmlFor='contact' className='-mb-0.5 '>
           Contact
@@ -76,7 +76,7 @@ export default function SignUp() {
           id='contact'
           type='number'
           placeholder='+91-'
-          className='border rounded h-[40px] px-4 appearance-none'
+          className='h-[40px] px-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
         />
         <label htmlFor='email' className='-mb-0.5'>
           Email
@@ -86,7 +86,7 @@ export default function SignUp() {
           onChange={handleChange}
           id='email'
           type='email'
-          className='border rounded h-[40px] px-4'
+          className='h-[40px] px-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
           placeholder='Enter here.'
         />
         <label htmlFor='password' className='-mb-0.5'>
@@ -97,7 +97,7 @@ export default function SignUp() {
           onChange={handleChange}
           id='password'
           type='password'
-          className='border rounded h-[40px] px-4'
+          className='h-[40px] px-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
           placeholder='Enter here.'
         />
         <span className='text-gray-500'>

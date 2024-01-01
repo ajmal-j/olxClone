@@ -1,9 +1,12 @@
 import Main from "../../components/main";
+import ProductContextProvider from "../../context/productContext";
 
 export default function Home() {
   return (
     <>
-      <Main/>
+      <ProductContextProvider>
+        <Main />
+      </ProductContextProvider>
     </>
   );
 }

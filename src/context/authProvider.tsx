@@ -12,12 +12,14 @@ import {
   useEffect,
   useState,
 } from "react";
-import { auth, db } from "../store/firebase";
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { auth, db, storage } from "../store/firebase";
+import { setDoc, doc, getDoc, getDocs, collection } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
-interface AuthContextValue {
+type AuthContextValue = {
   signUp: (email: string, password: string) => Promise<UserCredential>;
-  logOut: (setCurrentUser:React.SetStateAction<any>) => void;
+  logOut: (setCurrentUser: React.SetStateAction<any>) => void;
   logIn: (email: string, password: string) => Promise<UserCredential>;
   user?: any;
   setDetails(
@@ -26,24 +28,37 @@ interface AuthContextValue {
     contact: string,
     name: string
   ): Promise<unknown>;
+  setProduct(
+    id: string,
+    userId: string,
+    name: string,
+    category: string,
+    price: number,
+    imageUrl: string
+  ): Promise<unknown>;
   getDetails(id: string): Promise<unknown>;
-}
+  uploadImage(image: Blob): Promise<string>;
+  getAllData(): Promise<[]>;
+  getProduct(id:string):Promise<any>
+};
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState({});
+  const navigate = useNavigate();
   function signUp(email: string, password: string) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
   function logIn(email: string, password: string) {
     return signInWithEmailAndPassword(auth, email, password);
   }
-  function logOut(setCurrentUser:React.SetStateAction<any>) {
+  function logOut(setCurrentUser: React.SetStateAction<any>) {
     return signOut(auth)
       .then(() => {
-        setUser({})
-        setCurrentUser(undefined)
+        setUser({});
+        setCurrentUser(undefined);
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);
@@ -61,6 +76,23 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       name,
     });
   }
+  function setProduct(
+    id: string,
+    userId: string,
+    name: string,
+    category: string,
+    price: number,
+    imageUrl: string
+  ): Promise<void> {
+    return setDoc(doc(db, "products", id), {
+      name,
+      price,
+      category,
+      imageUrl,
+      userId,
+      createAt: new Date().toDateString(),
+    });
+  }
   async function getDetails(id: string) {
     try {
       const snapshot = await getDoc(doc(db, "users", id));
@@ -71,7 +103,39 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       throw error;
     }
   }
-
+  async function getProduct(id:string){
+    try {
+      const snapshot=await getDoc(doc(db,'products',id));
+      const data= snapshot.data();
+      return data;
+    } catch (error) {
+      console.log('Error while getting product',error);
+      throw error;
+    }
+  }
+  async function uploadImage(image: Blob) {
+    try {
+      // @ts-ignore
+      const storageRef = ref(storage, `/image/${image.name}`);
+      const snapshot = await uploadBytes(storageRef, image);
+      const url = await getDownloadURL(snapshot.ref);
+      return url;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error;
+    }
+  }
+  async function getAllData(): Promise<[]> {
+    const querySnapshot = await getDocs(collection(db, "products"));
+    const dataArray: [] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      data["id"] = doc.id;
+      // @ts-ignore
+      dataArray.push(data);
+    });
+    return dataArray;
+  }
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
       setUser(currentUser);
@@ -80,9 +144,21 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       unsubscribe();
     };
   });
+
   return (
     <AuthContext.Provider
-      value={{ signUp, logOut, logIn, user, setDetails, getDetails }}
+      value={{
+        signUp,
+        logOut,
+        logIn,
+        user,
+        setDetails,
+        getDetails,
+        uploadImage,
+        setProduct,
+        getAllData,
+        getProduct
+      }}
     >
       {children}
     </AuthContext.Provider>
