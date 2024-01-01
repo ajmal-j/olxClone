@@ -1,16 +1,33 @@
-import { FiSearch } from "react-icons/fi";
-
 type Input = {
   placeholder: string;
-  icon?: boolean;
-  className: string;
+  label: string;
+  onChange:any;
+  id: string;
+  type: string;
+  name: string;
 };
 
-export default function Input({ className, placeholder, icon }: Input) {
+export default function InputWithLabel({
+  id,
+  name,
+  label,
+  onChange,
+  placeholder,
+  type,
+}: Input) {
   return (
-    <div className='relative'>
-      <input type='text' placeholder={placeholder} className={className} />
-      {icon && <FiSearch className='absolute left-2 top-[1.1rem] text-xl' />}
-    </div>
+    <>
+      <label htmlFor='email' className='-mb-0.5'>
+        {label}
+      </label>
+      <input
+        name={name}
+        onChange={onChange}
+        id={id}
+        type={type}
+        className='h-[40px] px-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+        placeholder={placeholder}
+      />
+    </>
   );
 }

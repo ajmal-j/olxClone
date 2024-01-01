@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../../context/authProvider";
 import { FaSpinner } from "react-icons/fa";
+import InputWithLabel from "../../components/input";
+import toast from "react-hot-toast";
 
 export default function SignUp() {
   const { signUp, setDetails } = UserAuth();
@@ -29,6 +31,7 @@ export default function SignUp() {
       .then((result) => {
         setDetails(result.user.uid, state.email, state.contact, state.name)
           .then(() => {
+            toast.success('Signed Up')
             navigate("/");
           })
           .catch((error) => {
@@ -47,66 +50,57 @@ export default function SignUp() {
       });
   };
   return (
-    <div className='w-[500px] mx-auto mt-20 pt-5 pb-5` bg-gray-300 rounded-3xl border-gray-400 border-4 mb-5'>
+    <div className='w-[500px] mx-auto mt-10 pt-3 h-min bg-gray-100 rounded-[50px] pb-[20px] border-gray-300 border-4 mb-5'>
       <div>
-        <img src='/logo.png' className='h-[100px] mx-auto' alt='' />
+        <img src='/olx-logo.svg' className='h-[150px] mx-auto' alt='' />
       </div>
       <h1 className='font-bold text-2xl mt-5 text-center'>Sign Up</h1>
       <p className='block text-center pt-4 text-red-600'>
         {message ? message : "\u00A0"}
       </p>
       <form className='flex flex-col gap-3 p-5' onSubmit={handleSubmit}>
-        <label htmlFor='name' className='-mb-0.5 '>
-          Name
-        </label>
-        <input
+        <InputWithLabel
           name='name'
           onChange={handleChange}
           id='name'
           type='text'
           placeholder='Enter your full name.'
-          className='h-[40px] px-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+          label='name'
         />
-        <label htmlFor='contact' className='-mb-0.5 '>
-          Contact
-        </label>
-        <input
+
+        <InputWithLabel
           name='contact'
           onChange={handleChange}
           id='contact'
           type='number'
           placeholder='+91-'
-          className='h-[40px] px-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+          label='contact'
         />
-        <label htmlFor='email' className='-mb-0.5'>
-          Email
-        </label>
-        <input
+
+        <InputWithLabel
           name='email'
           onChange={handleChange}
           id='email'
           type='email'
-          className='h-[40px] px-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+          label='email'
           placeholder='Enter here.'
         />
-        <label htmlFor='password' className='-mb-0.5'>
-          Password
-        </label>
-        <input
+
+        <InputWithLabel
           name='password'
           onChange={handleChange}
           id='password'
           type='password'
-          className='h-[40px] px-4 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+          label='password'
           placeholder='Enter here.'
         />
-        <span className='text-gray-500'>
+        <span className='text-gray-500 mt-4 ms-2'>
           existing user?{" "}
           <Link to={"/signIn"}>
             <span className='underline text-black/70 font-bold'>Sign In</span>
           </Link>
         </span>
-        <button className='bg-gray-600 text-white h-[50px] mt-5 rounded  font-bold mb-5'>
+        <button className='bg-gray-600 text-white h-[50px] mt-2 rounded-full  font-bold mb-5'>
           {loading ? <FaSpinner className='animate-spin mx-auto' /> : "Sign Up"}
         </button>
       </form>

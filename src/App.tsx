@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import "./App.css";
 import Header from "./components/header";
 import Navbar from "./components/header/navbar";
@@ -33,6 +34,7 @@ function App() {
           <Route path='/createProduct' element={<CreateProduct />} />
         </Routes>
       </AuthProvider>
+      <Toaster position='top-right' reverseOrder={true} />
     </>
   );
 }

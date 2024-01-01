@@ -16,6 +16,7 @@ import { auth, db, storage } from "../store/firebase";
 import { setDoc, doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import toast from "react-hot-toast";
 
 type AuthContextValue = {
   signUp: (email: string, password: string) => Promise<UserCredential>;
@@ -58,6 +59,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       .then(() => {
         setUser({});
         setCurrentUser(undefined);
+        toast.success("Successfully loggedOut", {
+          id: "logOut",
+        });
         navigate("/");
       })
       .catch((error) => {

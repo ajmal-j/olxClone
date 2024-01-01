@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { UserAuth } from "../../context/authProvider";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function ProtectedRoute({
   children,
@@ -12,6 +13,9 @@ export default function ProtectedRoute({
 
   useEffect(() => {
     if (!user) {
+      toast.error("SignIn to sell", {
+        id: "sell",
+      });
       navigate("/signIn");
       return;
     }
