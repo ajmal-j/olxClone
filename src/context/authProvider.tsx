@@ -39,7 +39,7 @@ type AuthContextValue = {
   getDetails(id: string): Promise<unknown>;
   uploadImage(image: Blob): Promise<string>;
   getAllData(): Promise<[]>;
-  getProduct(id:string):Promise<any>
+  getProduct(id: string): Promise<any>;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -103,13 +103,13 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       throw error;
     }
   }
-  async function getProduct(id:string){
+  async function getProduct(id: string) {
     try {
-      const snapshot=await getDoc(doc(db,'products',id));
-      const data= snapshot.data();
+      const snapshot = await getDoc(doc(db, "products", id));
+      const data = snapshot.data();
       return data;
     } catch (error) {
-      console.log('Error while getting product',error);
+      console.log("Error while getting product", error);
       throw error;
     }
   }
@@ -157,7 +157,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         uploadImage,
         setProduct,
         getAllData,
-        getProduct
+        getProduct,
       }}
     >
       {children}

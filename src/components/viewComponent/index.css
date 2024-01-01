@@ -1,50 +1,66 @@
 .viewParentDiv {
-    padding-top: 4em;
-    display: flex;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.viewParentDiv .imageShowDiv {
+  padding: 16px;
+  max-width: 70vw;
+}
+
+.viewParentDiv .rightSection {
+  display: flex;
+  padding: 1rem;
+  gap: 10px;
+  margin-top: 3em;
+  width: min-content;
+}
+
+@media (max-width: 750px) {
   .viewParentDiv .imageShowDiv {
-    padding: 16px;
-    width: 70vw;
+    max-width: 100vw;
   }
-  .viewParentDiv .imageShowDiv img {
-    width: 65vw;
-    height: 85vh;
-  }
-  
   .viewParentDiv .rightSection {
-    padding: 16px;
-    margin-top: 3em;
-    width: 30vw;
+    flex-direction: row !important;
   }
-  
-  .viewParentDiv .rightSection .productDetails :first-child {
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #002f34;
-    font-size: 34px;
-    line-height: 32px;
-    margin-bottom: 20px;
+}
+@media (min-width: 750px) {
+  .viewParentDiv .rightSection {
+    flex-direction: column;
   }
-  
-  .viewParentDiv .rightSection .productDetails {
-    border: 1px solid black;
-    padding: 6px;
-    border-radius: 6px;
-    margin-bottom: 2em;
-    width: 100%;
-  }
-  
-  .viewParentDiv .rightSection .contactDetails {
-    border: 1px solid black;
-    padding: 6px;
-    border-radius: 6px;
-  }
-  
-  .viewParentDiv .rightSection .contactDetails :first-child {
-    font-size: 20px;
-    line-height: 24px;
-    font-weight: 700;
-    color: #002f34;
-    font-weight: 400;
-    padding: 0;
-  }
+}
+
+.viewParentDiv .rightSection .productDetails :first-child {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #002f34;
+  font-size: 34px;
+  line-height: 32px;
+  margin-bottom: 20px;
+}
+
+.viewParentDiv .rightSection .productDetails {
+  border: 1px solid rgb(106, 106, 106);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 2em;
+  width: 100%;
+  height: min-content;
+}
+
+.viewParentDiv .rightSection .contactDetails {
+  height: min-content;
+  width: 100%;
+  border: 1px solid rgb(106, 106, 106);
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.viewParentDiv .rightSection .contactDetails :first-child {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 700;
+  color: #002f34;
+  font-weight: 400;
+  padding: 0;
+}
