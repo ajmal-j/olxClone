@@ -1,13 +1,29 @@
-import { FiSearch } from "react-icons/fi";
+import { FiLogOut, FiSearch } from "react-icons/fi";
 import { FaPlus } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { UserAuth } from "../../context/authProvider";
 
 export default function Header() {
+  const { user, getDetails, logOut } = UserAuth();
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState<any>();
   const navigateFunction = () => {
     navigate("/");
   };
+  useEffect(() => {
+    if (!user?.uid) return;
+    const fetchData = async () => {
+      try {
+        const result = await getDetails(user.uid);
+        setCurrentUser(result);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+    fetchData();
+  }, [user]);
   return (
     <>
       <div className='w-full bg-white fixed top-0 left-0 right-0 h-[83px] border-b-[3px]'></div>
@@ -29,12 +45,33 @@ export default function Header() {
             <FaChevronDown className='absolute right-3 top-[1.1rem] text-xl' />
           </div>
           <div className='font-bold text-green-950'>ENGLISH</div>
-          <button className='font-bold text-green-950 border-black border-b-2 hover:border-b-transparent'>
-            Login
-          </button>
-          <button className='flex items-center gap-2 font-bold bg-white px-5 py-2 rounded-full border-4 border-black/70 hover:bg-black/10'>
-            <FaPlus /> SELL
-          </button>
+          {currentUser ? (
+            <>
+              <button className='font-bold text-green-950 border-black border-b-2 hover:border-b-transparent'>
+                {currentUser?.name}
+              </button>
+              <button
+                className='text-red-600 font-bold cursor-pointer'
+                title='logout'
+                onClick={() => logOut(setCurrentUser)}
+              >
+                <FiLogOut />
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to={"/signIn"}>
+                <button className='font-bold text-green-950 border-black border-b-2 hover:border-b-transparent'>
+                  Login
+                </button>
+              </Link>
+            </>
+          )}
+          <Link to={"/createProduct"}>
+            <button className='flex items-center gap-2 font-bold bg-white px-5 py-2 rounded-full border-4 border-black/70 hover:bg-black/10'>
+              <FaPlus /> SELL
+            </button>
+          </Link>
         </div>
       </div>
     </>

@@ -29,7 +29,7 @@ export default function SignUp() {
       .then((result) => {
         setDetails(result.user.uid, state.email, state.contact, state.name)
           .then(() => {
-            navigate("/signIn");
+            navigate("/");
           })
           .catch((error) => {
             console.log(error);
