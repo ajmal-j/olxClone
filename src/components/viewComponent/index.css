@@ -5,6 +5,7 @@
 }
 .viewParentDiv .imageShowDiv {
   padding: 16px;
+  min-width: 70%;
   max-width: 70vw;
 }
 

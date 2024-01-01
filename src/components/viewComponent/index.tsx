@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { ProductContext } from "../../context/productContext";
 import { UserAuth } from "../../context/authProvider";
@@ -7,6 +7,7 @@ import { FaSpinner, FaTrashAlt } from "react-icons/fa";
 
 const View = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [seller, setSeller] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const { view, setView } = useContext(ProductContext);
@@ -18,6 +19,7 @@ const View = () => {
     try {
       // @ts-ignore
       const productData = await getProductMemoized(id);
+      if(!productData) navigate('/')
       setView(productData);
       const sellerData = await getDetailsMemoized(productData?.userId);
       setSeller(sellerData);
@@ -41,25 +43,28 @@ const View = () => {
         <>
           <span className='block pt-[3rem] text-center font-bold text-2xl underline capitalize'>
             {" "}
-            {view.name}
+            {view?.name}
           </span>
           <div className='viewParentDiv'>
             <div className='imageShowDiv'>
-              <img className='rounded-xl' src={view.imageUrl} alt='' />
+              <img className='rounded-xl object-cover w-full h-full' src={view?.imageUrl} alt='' />
             </div>
             <div className='rightSection'>
               <div className='productDetails'>
-                <p>&#x20B9; {view.price}</p>
-                <p>{view.category}</p>
-                <span>{view.createAt}</span>
+                <p>&#x20B9; {view?.price}</p>
+                <p>{view?.category}</p>
+                <span>{view?.createAt}</span>
               </div>
               <div className='contactDetails'>
                 <p className='sellerDetails'>Seller details</p>
                 <p>{seller?.name}</p>
                 <p>{seller?.contact}</p>
-                {user && id && view.userId === user?.uid && (
+                {user && id && view?.userId === user?.uid && (
                   <button
-                    onClick={() => deleteProduct(id)}
+                    onClick={() => {
+                      deleteProduct(id);
+                      navigate("/");
+                    }}
                     className='flex w-full items-end justify-end text-red-600 pt-3'
                   >
                     <FaTrashAlt />

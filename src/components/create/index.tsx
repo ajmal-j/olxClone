@@ -37,7 +37,7 @@ export default function Create() {
       e.preventDefault();
       const { category, name, price } = state;
       7;
-      let url = "";
+      let url: string | null = "";
       let none = !name.trim()
         ? "name"
         : !category.trim()
@@ -46,16 +46,20 @@ export default function Create() {
         ? "price"
         : null;
       if (none)
-        return toast.error((none === "category" ? "Select " : "Enter " )+ none, {
-          id: "none",
-        });
+        return toast.error(
+          (none === "category" ? "Select " : "Enter ") + none,
+          {
+            id: "none",
+          }
+        );
       if (image) url = await uploadImage(image);
       else return toast.error("select a image");
+      if (!url) return toast.error("Error while uploading image.");
       setProduct(v4(), user.uid, name, category, price, url);
       toast.success("Uploaded");
       navigate("/");
     } catch (error) {
-      console.log("uploading docs : ", error);
+      console.error("uploading docs : ", error);
     } finally {
       setLoading(false);
     }

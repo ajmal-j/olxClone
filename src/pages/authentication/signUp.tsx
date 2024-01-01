@@ -35,7 +35,7 @@ export default function SignUp() {
             navigate("/");
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
           });
       })
       .catch((error: Error) => {

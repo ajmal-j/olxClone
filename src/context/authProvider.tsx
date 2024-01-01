@@ -45,7 +45,7 @@ type AuthContextValue = {
     imageUrl: string
   ): Promise<unknown>;
   getDetails(id: string): Promise<unknown>;
-  uploadImage(image: Blob): Promise<string>;
+  uploadImage(image: Blob): Promise<string | null>;
   getAllData(): Promise<[]>;
   getProduct(id: string): Promise<any>;
   deleteProduct(id: string): void;
@@ -73,7 +73,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         navigate("/signIn");
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   }
   function setDetails(
@@ -112,7 +112,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       return data;
     } catch (error) {
       console.error("Error fetching user details:", error);
-      throw error;
+      return null;
     }
   }
   async function getProduct(id: string) {
@@ -121,8 +121,8 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       const data = snapshot.data();
       return data;
     } catch (error) {
-      console.log("Error while getting product", error);
-      throw error;
+      console.error("Error while getting product", error);
+      return null;
     }
   }
   async function uploadImage(image: Blob) {
@@ -134,7 +134,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       return url;
     } catch (error) {
       console.error("Error uploading image:", error);
-      throw error;
+      return null;
     }
   }
   async function getAllData(): Promise<[]> {
@@ -152,9 +152,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     try {
       if (!id) throw new Error("Invalid Id.");
       await deleteDoc(doc(db, "products", id));
-      console.log("deleted");
+      toast.success("Deleted");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
   useEffect(() => {
