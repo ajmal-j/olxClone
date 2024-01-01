@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../../context/authProvider";
 import { FaSpinner } from "react-icons/fa";
 
 export default function SignUp() {
-  const { signUp } = UserAuth();
+  const { signUp, setDetails } = UserAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [state, setState] = useState({
@@ -13,6 +13,7 @@ export default function SignUp() {
     password: "",
     contact: "",
   });
+  const navigate = useNavigate();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setState((prevState) => ({
@@ -23,14 +24,17 @@ export default function SignUp() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setMessage("");
+    setLoading(true);
     signUp(state.email, state.password)
-      .then((result: any) => {
-        try {
-          result.user.updateProfile({ displayName: state.name });
-        } catch (error) {
-          console.log(error);
-        }
+      .then((result) => {
         console.log("loggedIn");
+        setDetails(result.user.uid, state.email, state.contact, state.name)
+          .then(() => {
+            navigate("/signIn");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       })
       .catch((error: Error) => {
         let i = error.message.indexOf("auth/") + 5;
@@ -38,7 +42,9 @@ export default function SignUp() {
         setMessage(errorMessage);
       })
       .finally(() => {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
       });
   };
   return (
