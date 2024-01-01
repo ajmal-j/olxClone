@@ -2,7 +2,6 @@ import { Toaster } from "react-hot-toast";
 import "./App.css";
 import Header from "./components/header";
 import Navbar from "./components/header/navbar";
-import ProtectedRoute from "./components/protectedRoute";
 import View from "./components/viewComponent";
 import AuthProvider from "./context/authProvider";
 import ProductContextProvider from "./context/productContext";
@@ -11,10 +10,11 @@ import SignUp from "./pages/authentication/signUp";
 import CreateProduct from "./pages/createProduct";
 import Home from "./pages/homePage";
 import { Route, Routes } from "react-router-dom";
+import Footer from "./components/footer";
 
 function App() {
   return (
-    <>
+    <div className='App'>
       <AuthProvider>
         <Header />
         <Navbar />
@@ -34,8 +34,9 @@ function App() {
           <Route path='/createProduct' element={<CreateProduct />} />
         </Routes>
       </AuthProvider>
+      <Footer />
       <Toaster position='top-right' reverseOrder={true} />
-    </>
+    </div>
   );
 }
 

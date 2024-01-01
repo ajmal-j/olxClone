@@ -62,7 +62,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         toast.success("Successfully loggedOut", {
           id: "logOut",
         });
-        navigate("/");
+        navigate("/signIn");
       })
       .catch((error) => {
         console.log(error);

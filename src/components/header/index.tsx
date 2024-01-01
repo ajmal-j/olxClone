@@ -61,7 +61,7 @@ export default function Header() {
             </>
           )}
           <Link to={"/createProduct"}>
-            <button className='flex items-center gap-2 font-bold bg-white px-5 py-2 rounded-full border-4 border-black/70 hover:bg-black/10'>
+            <button className='flex items-center gap-2 font-bold bg-white px-5 py-2 rounded-full border-4 border-yellow-400 hover:bg-black/10'>
               <FaPlus /> SELL
             </button>
           </Link>

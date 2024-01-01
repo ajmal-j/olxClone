@@ -1,9 +1,10 @@
 import { useState } from "react";
-import "./index.css";
 import { UserAuth } from "../../context/authProvider";
 import { FaSpinner } from "react-icons/fa";
 import { v4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import "./index.css";
+import toast from "react-hot-toast";
 
 type Create = {
   name: string;
@@ -21,7 +22,9 @@ export default function Create() {
     price: 0,
   });
   const navigate = useNavigate();
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setState((prev) => ({
       ...prev,
@@ -35,17 +38,21 @@ export default function Create() {
       const { category, name, price } = state;
       7;
       let url = "";
-      let none = !name
+      let none = !name.trim()
         ? "name"
-        : !category
+        : !category.trim()
         ? "category"
         : !price
         ? "price"
         : null;
-      if (none) return alert("Enter " + none);
+      if (none)
+        return toast.error((none === "category" ? "Select " : "Enter " )+ none, {
+          id: "none",
+        });
       if (image) url = await uploadImage(image);
-      else return alert("select a image");
+      else return toast.error("select a image");
       setProduct(v4(), user.uid, name, category, price, url);
+      toast.success("Uploaded");
       navigate("/");
     } catch (error) {
       console.log("uploading docs : ", error);
@@ -55,10 +62,10 @@ export default function Create() {
   };
 
   return (
-    <div className='flex flex-col justify-center py-12 sm:px-6 lg:px-8'>
+    <div className='flex flex-col justify-center mx-4 py-12 sm:px-6 lg:px-8'>
       <div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>
-        <div className='bg-gray-200 py-20 px-4 shadow sm:rounded-lg sm:px-10'>
-          <h1 className='text-3xl font-bold pb-5 text-black/60'>Add Product</h1>
+        <div className='bg-gray-200 py-20 px-4 shadow rounded-3xl sm:px-10 mb-5'>
+          <h1 className='text-4xl pb-5 text-black/60'>Add Product</h1>
           <form onSubmit={handleSubmit}>
             <div>
               <label
@@ -79,7 +86,7 @@ export default function Create() {
               </div>
             </div>
 
-            <div className='mt-6'>
+            <div className='mt-4'>
               <label
                 className='block text-sm font-medium text-gray-700'
                 htmlFor='category'
@@ -87,17 +94,22 @@ export default function Create() {
                 Category
               </label>
               <div className='mt-1'>
-                <input
+                <select
                   onChange={handleChange}
                   className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
-                  autoComplete='category'
-                  type='text'
                   name='category'
                   id='category'
-                />
+                >
+                  <option value=''>select category</option>
+                  <option value='Cars'>Cars</option>
+                  <option value='Motorcycle'>Motorcycle</option>
+                  <option value='Mobile Phone'>Mobile Phone</option>
+                  <option value='Scooter'>Scooter</option>
+                  <option value='Others'>Others</option>
+                </select>
               </div>
             </div>
-            <div className='mt-6'>
+            <div className='mt-4'>
               <label
                 className='block text-sm font-medium text-gray-700'
                 htmlFor='price'
@@ -120,7 +132,6 @@ export default function Create() {
                 {image ? (
                   <img
                     src={image ? URL.createObjectURL(image) : ""}
-                    alt=''
                     className='h-[200px] z-10'
                   />
                 ) : (
