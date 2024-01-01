@@ -27,7 +27,6 @@ export default function SignUp() {
     setLoading(true);
     signUp(state.email, state.password)
       .then((result) => {
-        console.log("loggedIn");
         setDetails(result.user.uid, state.email, state.contact, state.name)
           .then(() => {
             navigate("/signIn");
@@ -48,7 +47,7 @@ export default function SignUp() {
       });
   };
   return (
-    <div className='w-[500px] mx-auto mt-20 pt-5 pb-5` bg-gray-300 rounded-lg border-gray-400 border-4'>
+    <div className='w-[500px] mx-auto mt-20 pt-5 pb-5` bg-gray-300 rounded-lg border-gray-400 border-4 mb-5'>
       <div>
         <img src='/logo.png' className='h-[100px] mx-auto' alt='' />
       </div>
