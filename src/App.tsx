@@ -11,6 +11,7 @@ import CreateProduct from "./pages/createProduct";
 import Home from "./pages/homePage";
 import { Route, Routes } from "react-router-dom";
 import Footer from "./components/footer";
+import ProtectedUser from "./components/protectUser";
 
 function App() {
   return (
@@ -29,8 +30,22 @@ function App() {
               </ProductContextProvider>
             }
           />
-          <Route path='/signUp' element={<SignUp />} />
-          <Route path='/signIn' element={<SignIn />} />
+          <Route
+            path='/signUp'
+            element={
+              <ProtectedUser>
+                <SignUp />
+              </ProtectedUser>
+            }
+          />
+          <Route
+            path='/signIn'
+            element={
+              <ProtectedUser>
+                <SignIn />
+              </ProtectedUser>
+            }
+          />
           <Route path='/createProduct' element={<CreateProduct />} />
         </Routes>
       </AuthProvider>

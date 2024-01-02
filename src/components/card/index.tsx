@@ -15,6 +15,7 @@ export default function Card() {
   const navigateFunction = (e: React.MouseEvent<HTMLDivElement>) => {
     const id = e.currentTarget.dataset.id;
     if (id) navigate(`/view/${id}`);
+    window.scrollTo(0, 0);
   };
 
   const getAllDataMemoized = useMemo(() => getAllData, []);

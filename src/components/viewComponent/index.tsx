@@ -3,7 +3,14 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { ProductContext } from "../../context/productContext";
 import { UserAuth } from "../../context/authProvider";
 import "./index.css";
-import { FaSpinner, FaTrashAlt } from "react-icons/fa";
+import {
+  FaPhone,
+  FaSpinner,
+  FaTrashAlt,
+  FaUser,
+  FaUserCheck,
+} from "react-icons/fa";
+import Card from "../card";
 
 const View = () => {
   const { id } = useParams();
@@ -19,7 +26,7 @@ const View = () => {
     try {
       // @ts-ignore
       const productData = await getProductMemoized(id);
-      if(!productData) navigate('/')
+      if (!productData) navigate("/");
       setView(productData);
       const sellerData = await getDetailsMemoized(productData?.userId);
       setSeller(sellerData);
@@ -33,7 +40,7 @@ const View = () => {
   useEffect(() => {
     setLoading(true);
     fetchData();
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -41,40 +48,61 @@ const View = () => {
         <FaSpinner className='animate-spin text-2xl mx-auto mt-5' />
       ) : (
         <>
-          <span className='block pt-[3rem] text-center font-bold text-2xl underline capitalize'>
-            {" "}
-            {view?.name}
-          </span>
           <div className='viewParentDiv'>
             <div className='imageShowDiv'>
-              <img className='rounded-xl object-cover w-full h-full' src={view?.imageUrl} alt='' />
+              <img
+                className='rounded-xl object-cover w-full h-full'
+                src={view?.imageUrl}
+                alt=''
+              />
             </div>
-            <div className='rightSection'>
-              <div className='productDetails'>
+            <span className='block pt-[3rem] text-center text-2xl capitalize'>
+              {view?.name}
+            </span>
+            <div className='rightSection container mx-auto'>
+              <div className='productDetails childElement'>
                 <p>&#x20B9; {view?.price}</p>
                 <p>{view?.category}</p>
                 <span>{view?.createAt}</span>
+                <button className='buttonClass block bg-[rgba(0,47,52,1)] w-full text-white py-3 mt-2 rounded-lg'>
+                  Make offer
+                </button>
               </div>
-              <div className='contactDetails'>
+              <div className='contactDetails childElement'>
                 <p className='sellerDetails'>Seller details</p>
-                <p>{seller?.name}</p>
-                <p>{seller?.contact}</p>
+                <p className='flex gap-3 items-center'>
+                  <FaUserCheck className='text-black/80' /> {seller?.name}
+                </p>
+                <p className='flex gap-3 items-center'>
+                  {" "}
+                  <FaPhone className='text-black/80' /> {seller?.contact}
+                </p>
                 {user && id && view?.userId === user?.uid && (
-                  <button
-                    onClick={() => {
-                      deleteProduct(id);
-                      navigate("/");
-                    }}
-                    className='flex w-full items-end justify-end text-red-600 pt-3'
-                  >
-                    <FaTrashAlt />
+                  <button className='cursor-default flex w-full items-end justify-end text-red-600 pt-3'>
+                    <FaTrashAlt
+                      className='cursor-pointer'
+                      onClick={() => {
+                        deleteProduct(id);
+                        navigate("/");
+                      }}
+                    />
                   </button>
                 )}
               </div>
             </div>
+            <div className='container mx-auto border p-4 rounded-xl'>
+              <h1 className='font-bold pb-3 underline'>Product Detail's</h1>
+              <span>{view?.description}</span>
+            </div>
           </div>
         </>
       )}
+      <div className='mt-5 border-t-[1px] border-t-gray-300 pt-5'>
+        <div className='container mx-auto'>
+          <h1 className='text-2xl font-thin mb-3 '>Related Product's</h1>
+          <Card />
+        </div>
+      </div>
     </>
   );
 };

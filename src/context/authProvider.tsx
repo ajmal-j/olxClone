@@ -42,7 +42,8 @@ type AuthContextValue = {
     name: string,
     category: string,
     price: number,
-    imageUrl: string
+    imageUrl: string,
+    description: string
   ): Promise<unknown>;
   getDetails(id: string): Promise<unknown>;
   uploadImage(image: Blob): Promise<string | null>;
@@ -94,7 +95,8 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     name: string,
     category: string,
     price: number,
-    imageUrl: string
+    imageUrl: string,
+    description: string
   ): Promise<void> {
     return setDoc(doc(db, "products", id), {
       name,
@@ -102,6 +104,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       category,
       imageUrl,
       userId,
+      description,
       createAt: new Date().toDateString(),
     });
   }

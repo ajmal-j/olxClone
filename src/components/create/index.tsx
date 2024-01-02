@@ -10,6 +10,7 @@ type Create = {
   name: string;
   category: string;
   price: number;
+  description: string;
 };
 
 export default function Create() {
@@ -19,11 +20,14 @@ export default function Create() {
   const [state, setState] = useState<Create>({
     name: "",
     category: "",
+    description: "",
     price: 0,
   });
   const navigate = useNavigate();
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target;
     setState((prev) => ({
@@ -35,15 +39,17 @@ export default function Create() {
     setLoading(true);
     try {
       e.preventDefault();
-      const { category, name, price } = state;
+      const { category, name, price, description } = state;
       7;
       let url: string | null = "";
       let none = !name.trim()
         ? "name"
         : !category.trim()
         ? "category"
-        : !price
+        : !price || price < 1
         ? "price"
+        : !description.trim()
+        ? "description"
         : null;
       if (none)
         return toast.error(
@@ -55,7 +61,7 @@ export default function Create() {
       if (image) url = await uploadImage(image);
       else return toast.error("select a image");
       if (!url) return toast.error("Error while uploading image.");
-      setProduct(v4(), user.uid, name, category, price, url);
+      setProduct(v4(), user.uid, name, category, price, url, description);
       toast.success("Uploaded");
       navigate("/");
     } catch (error) {
@@ -108,7 +114,8 @@ export default function Create() {
                   <option value='Cars'>Cars</option>
                   <option value='Motorcycle'>Motorcycle</option>
                   <option value='Mobile Phone'>Mobile Phone</option>
-                  <option value='Scooter'>Scooter</option>
+                  <option value='Wearables'>Wearables</option>
+                  <option value='Cycle'>Cycle</option>
                   <option value='Others'>Others</option>
                 </select>
               </div>
@@ -131,6 +138,24 @@ export default function Create() {
                 />
               </div>
             </div>
+
+            <div className='mt-4'>
+              <label
+                className='block text-sm font-medium text-gray-700'
+                htmlFor='description'
+              >
+                Description
+              </label>
+              <div className='mt-1'>
+                <textarea
+                  onChange={handleChange}
+                  className='appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                  name='description'
+                  id='description'
+                />
+              </div>
+            </div>
+
             <div className='my-7'>
               <label className='custum-file-upload' htmlFor='file'>
                 {image ? (
@@ -173,6 +198,7 @@ export default function Create() {
                   }
                   type='file'
                   id='file'
+                  multiple
                 />
               </label>
             </div>

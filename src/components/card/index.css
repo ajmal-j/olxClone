@@ -23,7 +23,7 @@
 .card .image {
   display: flex;
   justify-content: center;
-  background-color: rgb(226, 226, 226);
+  background-color: rgb(239, 239, 239);
   border-radius:10px;
   align-items: center;
 }
