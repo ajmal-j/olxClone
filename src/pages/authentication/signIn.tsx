@@ -43,7 +43,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className='w-[500px] mx-auto mt-20 pt-5 h-min bg-gray-100 rounded-[50px] pb-[20px] border-gray-300 border-4'>
+    <div className='max-w-[500px] w-full mx-auto mt-20 pt-5 h-min bg-gray-100 rounded-[50px] pb-[20px] border-gray-300 border-4'>
       <div>
         <img src='/olx-logo.svg' className='h-[150px] mx-auto' alt='' />
       </div>

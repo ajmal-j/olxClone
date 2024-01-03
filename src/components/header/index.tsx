@@ -9,9 +9,9 @@ export default function Header() {
   const { user, getDetails, logOut } = UserAuth();
   const [currentUser, setCurrentUser] = useState<any>();
   useEffect(() => {
-    if (!user?.uid) return;
     const fetchData = async () => {
       try {
+        if(!user.uid) return
         const result = await getDetails(user.uid);
         setCurrentUser(result);
       } catch (error) {

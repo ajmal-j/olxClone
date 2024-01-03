@@ -9,7 +9,6 @@ export const ProductContextProvider = ({
 }) => {
   const [view, setView] = useState<object>({});
   return (
-    // @ts-ignore
     <ProductContext.Provider value={{ view, setView }}>
       {children}
     </ProductContext.Provider>

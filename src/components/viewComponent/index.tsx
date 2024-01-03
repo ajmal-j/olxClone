@@ -3,13 +3,7 @@ import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { ProductContext } from "../../context/productContext";
 import { UserAuth } from "../../context/authProvider";
 import "./index.css";
-import {
-  FaPhone,
-  FaSpinner,
-  FaTrashAlt,
-  FaUser,
-  FaUserCheck,
-} from "react-icons/fa";
+import { FaPhone, FaSpinner, FaTrashAlt, FaUserCheck } from "react-icons/fa";
 import Card from "../card";
 
 const View = () => {
@@ -17,6 +11,7 @@ const View = () => {
   const navigate = useNavigate();
   const [seller, setSeller] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingImage, setLoadingImage] = useState<boolean>(true);
   const { view, setView } = useContext(ProductContext);
   const { getDetails, getProduct, deleteProduct, user } = UserAuth();
   const getProductMemoized = useMemo(() => getProduct, []);
@@ -50,10 +45,18 @@ const View = () => {
         <>
           <div className='viewParentDiv'>
             <div className='imageShowDiv'>
+              {loadingImage && (
+                <img
+                  className='animate-pulse rounded-xl object-cover w-full h-full'
+                  src={"/load.svg"}
+                />
+              )}
               <img
                 className='rounded-xl object-cover w-full h-full'
                 src={view?.imageUrl}
-                alt=''
+                onLoad={() => {
+                  setLoadingImage(false);
+                }}
               />
             </div>
             <span className='block pt-[3rem] text-center text-2xl capitalize'>
@@ -77,7 +80,7 @@ const View = () => {
                   {" "}
                   <FaPhone className='text-black/80' /> {seller?.contact}
                 </p>
-                {user && id && view?.userId === user?.uid && (
+                {user.uid && id && view?.userId === user?.uid && (
                   <button className='cursor-default flex w-full items-end justify-end text-red-600 pt-3'>
                     <FaTrashAlt
                       className='cursor-pointer'

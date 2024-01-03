@@ -15,7 +15,7 @@ export default function ProtectedUser({
       navigate("/");
       return;
     }
-  }, [user, navigate]);
+  }, [user]);
 
-  return !user ? <>{children}</> : null;
+  return user && user.uid ? null : <>{children}</>;
 }

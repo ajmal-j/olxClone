@@ -10,7 +10,7 @@ export default function Navbar() {
           className='cursor-pointer font-bold flex items-center gap-3 ps-3'
         >
           ALL CATEGORIES{" "}
-          {openWindow ? (
+          {!openWindow ? (
             <FaChevronDown
               className='transition-transform duration-150'
               style={{ transform: "rotate(360deg)" }}

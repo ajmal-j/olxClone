@@ -27,11 +27,17 @@ export default function SignUp() {
     e.preventDefault();
     setMessage("");
     setLoading(true);
+    if (!state.name.trim() || !state.contact.trim()) {
+      const none = !state.name.trim() ? "name" : "contact";
+      setMessage("Invalid-" + none);
+      setLoading(false);
+      return;
+    }
     signUp(state.email, state.password)
       .then((result) => {
         setDetails(result.user.uid, state.email, state.contact, state.name)
           .then(() => {
-            toast.success('Signed Up')
+            toast.success("Signed Up");
             navigate("/");
           })
           .catch((error) => {
@@ -50,11 +56,11 @@ export default function SignUp() {
       });
   };
   return (
-    <div className='w-[500px] mx-auto mt-10 pt-3 h-min bg-gray-100 rounded-[50px] pb-[20px] border-gray-300 border-4 mb-5'>
+    <div className='max-w-[500px] w-full mx-auto mt-10 pt-3 h-min bg-gray-100 rounded-[50px] pb-[20px] border-gray-300 border-4 mb-5'>
       <div>
         <img src='/olx-logo.svg' className='h-[150px] mx-auto' alt='' />
       </div>
-      <h1 className='font-bold text-2xl mt-5 text-center'>Sign Up</h1>
+      <h1 className=' text-3xl mt-5 text-center'>Sign Up</h1>
       <p className='block text-center pt-4 text-red-600'>
         {message ? message : "\u00A0"}
       </p>

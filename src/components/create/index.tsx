@@ -61,6 +61,7 @@ export default function Create() {
       if (image) url = await uploadImage(image);
       else return toast.error("select a image");
       if (!url) return toast.error("Error while uploading image.");
+      if (!user.uid) return toast.error("Please LogIn again");
       setProduct(v4(), user.uid, name, category, price, url, description);
       toast.success("Uploaded");
       navigate("/");
@@ -75,6 +76,7 @@ export default function Create() {
     <div className='flex flex-col justify-center mx-4 py-12 sm:px-6 lg:px-8'>
       <div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>
         <div className='bg-gray-200 py-20 px-4 shadow rounded-3xl sm:px-10 mb-5'>
+          <img src="/olx-logo.svg" alt="" className="max-w-[150px]" />
           <h1 className='text-4xl pb-5 text-black/60'>Add Product</h1>
           <form onSubmit={handleSubmit}>
             <div>

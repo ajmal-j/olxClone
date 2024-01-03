@@ -10,7 +10,7 @@ export default function Card() {
   const [products, setProducts] = useState<[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { getAllData } = UserAuth();
+  const { getAllData, } = UserAuth();
   // const { setView } = useContext(ProductContext);
   const navigateFunction = (e: React.MouseEvent<HTMLDivElement>) => {
     const id = e.currentTarget.dataset.id;

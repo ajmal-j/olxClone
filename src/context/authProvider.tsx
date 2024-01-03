@@ -1,5 +1,6 @@
 import {
   UserCredential,
+  UserInfo,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -26,10 +27,10 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import toast from "react-hot-toast";
 
 type AuthContextValue = {
+  user: UserInfo | User;
   signUp: (email: string, password: string) => Promise<UserCredential>;
   logOut: (setCurrentUser: React.SetStateAction<any>) => void;
   logIn: (email: string, password: string) => Promise<UserCredential>;
-  user?: any;
   setDetails(
     id: string,
     email: string,
@@ -51,22 +52,27 @@ type AuthContextValue = {
   getProduct(id: string): Promise<any>;
   deleteProduct(id: string): void;
 };
-
+type User = {
+  uid: string | null;
+};
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState({});
   const navigate = useNavigate();
+  const [user, setUser] = useState<User | UserInfo>({ uid: null });
+
   function signUp(email: string, password: string) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
+
   function logIn(email: string, password: string) {
     return signInWithEmailAndPassword(auth, email, password);
   }
+
   function logOut(setCurrentUser: React.SetStateAction<any>) {
     return signOut(auth)
       .then(() => {
-        setUser({});
+        setUser({ uid: null });
         setCurrentUser(undefined);
         toast.success("Successfully loggedOut", {
           id: "logOut",
@@ -77,6 +83,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         console.error(error);
       });
   }
+
   function setDetails(
     id: string,
     email: string,
@@ -89,6 +96,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       name,
     });
   }
+
   function setProduct(
     id: string,
     userId: string,
@@ -108,6 +116,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       createAt: new Date().toDateString(),
     });
   }
+
   async function getDetails(id: string) {
     try {
       const snapshot = await getDoc(doc(db, "users", id));
@@ -118,6 +127,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       return null;
     }
   }
+
   async function getProduct(id: string) {
     try {
       const snapshot = await getDoc(doc(db, "products", id));
@@ -128,6 +138,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       return null;
     }
   }
+
   async function uploadImage(image: Blob) {
     try {
       // @ts-ignore
@@ -140,6 +151,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       return null;
     }
   }
+
   async function getAllData(): Promise<[]> {
     const querySnapshot = await getDocs(collection(db, "products"));
     const dataArray: [] = [];
@@ -151,6 +163,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     });
     return dataArray;
   }
+
   async function deleteProduct(id: string) {
     try {
       if (!id) throw new Error("Invalid Id.");
@@ -160,9 +173,10 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       console.error(error);
     }
   }
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) setUser(currentUser);
     });
     return () => {
       unsubscribe();
@@ -190,8 +204,8 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function UserAuth() {
-  const context = useContext(AuthContext);
+export function UserAuth(): AuthContextValue {
+  const context = useContext<AuthContextValue | undefined>(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }

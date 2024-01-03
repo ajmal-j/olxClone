@@ -1,7 +1,8 @@
 export default function Footer() {
   return (
     <div className='mt-auto pt-20'>
-      <img src='/phone-app.webp' className='object-contain ml-5' alt='' />
+      <img src='/phone-app.webp' className='object-cover' alt='' />
+
       <footer className='flex gap-3 w-full justify-between items-top flex-wrap bg-gray-200 p-4 border-t-[1px] border-t-gray-300'>
         <div className=''>
           <h3 className='font-bold underline pb-3 text-black/80'>

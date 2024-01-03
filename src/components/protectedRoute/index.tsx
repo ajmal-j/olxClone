@@ -12,7 +12,7 @@ export default function ProtectedRoute({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (!user.uid) {
       toast.error("SignIn to become a seller", {
         id: "sell",
       });
