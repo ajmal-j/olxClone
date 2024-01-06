@@ -40,7 +40,7 @@ export default function Card() {
       {loading && !products.length && (
         <FiLoader className='animate-spin text-3xl' />
       )}
-      {products.map(({ category, createAt, id, imageUrl, name, price }, i) => {
+      {products.map(({ category, createAt, id, imageUrl, name, price }) => {
         return (
           <div
             // onClick={() => {
